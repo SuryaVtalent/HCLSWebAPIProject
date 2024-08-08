@@ -29,7 +29,7 @@ namespace HCLSWebAPI.Models
 
         [ForeignKey("AdminTypes")]
         [Required(ErrorMessage ="ID is Mandatory")]
-        [ZeroOrNegativeCheck(ErrorMessage ="Please Select Department")]
+        [ZeroOrNegativeCheck(ErrorMessage ="Please Select AdminTypeId")]
         public int AdminTypeId { get; set; }
 
         public AdminTypes AdminTypes { get; set; }
