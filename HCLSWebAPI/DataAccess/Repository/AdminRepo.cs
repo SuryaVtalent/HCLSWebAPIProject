@@ -45,6 +45,9 @@ namespace HCLSWebAPI.DataAccess.Repository
             return await AdmRep.SaveChangesAsync();
         }
 
-        
+        public async Task<List<Admins>> CheckLogin(string Email, string Password)
+        {
+          return await AdmRep.Admin.Where(x => x.Email == Email && x.Password == Password).ToListAsync();
+        }
     }
 }

@@ -95,6 +95,28 @@ namespace HCLSWebAPI.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("CheckLogin")]
+        public async Task<IActionResult> CheckLogin(string Email, string Password)
+        {
+            try
+            {
+                var AdmList = await AdmRef.CheckLogin(Email,Password);
+                if (AdmList.Count > 0)
+                {
+                    return Ok(AdmList);
+                }
+                else
+                {
+                    return BadRequest("Records not Found");
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Something went wrong " + e.Message + "Will resolve soon");
+            }
+        }
+
 
         [HttpPut]
         [Route("UpdateAdmin")]
