@@ -78,5 +78,20 @@ namespace HCLSProjectTest.DataAccessTest.RepositoryTest
         {
             return _db.Count;
         }
+
+        public Task<List<Admins>> CheckLogin(string Email, string Password)
+        {
+            Admins adm = null;
+
+            foreach (Admins a in _db)
+            {
+                if (a.Email==Email && a.Password==Password)
+                {
+                    adm = a;
+                    break;
+                }
+            }
+            return Task.FromResult(_db);
+        }
     }
 }

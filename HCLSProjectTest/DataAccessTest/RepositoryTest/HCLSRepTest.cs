@@ -202,7 +202,47 @@ namespace HCLSProjectTest.DataAccessTest.RepositoryTest
             Assert.AreEqual(2,obj.TotalRecords());
         }
 
-        
+        [TestMethod]
+        public async Task TestCheckLogin()
+        {
+            Admins admin1 = new Admins()
+            {
+                AdminId = 1001,
+                Name = "Surya",
+                Gender = "Male",
+                Email = "surya@gmail.com",
+                Password = "12345",
+                Address = "Hyd",
+                Active = true,
+                AdminTypeId = 10
+            };
+
+            Admins admin2 = new Admins()
+            {
+                AdminId = 1002,
+                Name = "Greeshma",
+                Gender = "Female",
+                Email = "greeshma@gmail.com",
+                Password = "12345",
+                Address = "Chennai",
+                Active = true,
+                AdminTypeId = 10
+            };
+
+            HCLSProjectRepo obj = new HCLSProjectRepo();
+            await obj.AdminRegistration(admin1);
+            await obj.AdminRegistration(admin2);
+
+            var res = obj.CheckLogin(admin1.Email,admin1.Password);
+
+            Assert.IsNotNull(obj._db);
+            Assert.AreEqual(2,obj.TotalRecords());
+
+
+        }
+
+
+
 
     }
 }
