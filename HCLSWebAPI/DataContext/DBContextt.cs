@@ -9,5 +9,13 @@ namespace HCLSWebAPI.DataContext
 
         public DbSet<AdminTypes>AdminType { get; set; }
         public DbSet<Admins>Admin {  get; set; }
+        public DbSet<Department>Departments { get; set; }
+        public DbSet<Receptionist>Receptionists { get; set; }
+        public DbSet<Helper>Helpers { get; set; }
+        public DbSet<Lab>Labs { get; set; }
+        public DbSet<DoctorSpecialization>DoctorSpecialize { get; set; }
+        public DbSet<Doctor>Doctors { get; set; }
+        public DbSet<PatientStatus>PatientStatuss { get; set; }
+        public DbSet<Patient>Patients { get; set; }
     }   
 }

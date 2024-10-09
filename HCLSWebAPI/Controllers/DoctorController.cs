@@ -9,42 +9,31 @@ namespace HCLSWebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AdminnController : ControllerBase
+    public class DoctorController : ControllerBase
     {
-
-        public IAdminRepo AdmRef;
-
-        public AdminnController(IAdminRepo admRef)
+        public IDocRepo DocRef;
+        public DoctorController(IDocRepo docRef)
         {
-            AdmRef= admRef;
+            DocRef = docRef;
         }
 
         [HttpPost]
-        [Route("AdminRegistration")]
-        public async Task<IActionResult> AdminRegistration(Admins admin)
+        [Route("InsertDoctor")]
+        public async Task<IActionResult> InsertDoctor(Doctor doctor)
         {
-            
-                try
+            try
+            {
+               var count=await DocRef.InsertDoctor(doctor);
+                if (count > 0)
                 {
-                if (ModelState.IsValid)
-                {
-
-                    var count = await AdmRef.AdminRegistration(admin);
-                    if (count > 0)
-                    {
-                        return Ok(count);
-                    }
-                    else
-                    {
-                        return BadRequest("Records not Registered");
-                    }
+                    return Ok(count);
                 }
                 else
                 {
-                    return BadRequest(ModelState);
+                    return NotFound("Records are Not Inserted");
                 }
-                }
-                
+
+            }
             catch (Exception e)
             {
                 return BadRequest("Something went wrong "+e.Message+"Will resolve soon");
@@ -52,20 +41,21 @@ namespace HCLSWebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("AllOperationalAdmins")]
-        public async Task<IActionResult> AllOperationalAdmins()
+        [Route("AllDoctors")]
+        public async Task<IActionResult> AllDoctors()
         {
             try
             {
-                var AdmList = await AdmRef.AllOperationalAdmins();
-                if (AdmList.Count > 0)
+                var DocList = await DocRef.AllDoctors();
+                if (DocList.Count > 0)
                 {
-                    return Ok(AdmList);
+                    return Ok(DocList);
                 }
                 else
                 {
-                    return BadRequest("Records not Found");
+                    return NotFound("Records are Not Available");
                 }
+
             }
             catch (Exception e)
             {
@@ -74,20 +64,21 @@ namespace HCLSWebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("AdminByAdminEmail")]
-        public async Task<IActionResult> AdminByAdminEmail(string Email)
+        [Route("GetDoctorById")]
+        public async Task<IActionResult> GetDoctorById(int DocId)
         {
             try
             {
-                var Em = await AdmRef.AdminByAdminEmail(Email);
-                if (Em !=null)
+                var Doc = await DocRef.GetDoctorById(DocId);
+                if (Doc !=null)
                 {
-                    return Ok(Em);
+                    return Ok(Doc);
                 }
                 else
                 {
-                    return BadRequest("Records not Found");
+                    return NotFound("Records are Not Available");
                 }
+
             }
             catch (Exception e)
             {
@@ -96,20 +87,43 @@ namespace HCLSWebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("AdminByAdminId")]
-        public async Task<IActionResult> AdminByAdminId(int AdminId)
+        [Route("GetDoctorByDeptNo")]
+        public async Task<IActionResult> GetDoctorByDeptNo(int DeptNo)
         {
             try
             {
-                var Em = await AdmRef.AdminByAdminId(AdminId);
-                if (Em != null)
+                var DocList = await DocRef.GetDoctorByDeptNo(DeptNo);
+                if (DocList.Count > 0)
                 {
-                    return Ok(Em);
+                    return Ok(DocList);
                 }
                 else
                 {
-                    return BadRequest("Records not Found");
+                    return NotFound("Records are Not Available");
                 }
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Something went wrong " + e.Message + "Will resolve soon");
+            }
+        }
+        [HttpGet]
+        [Route("GetDoctorByDocSpecId")]
+        public async Task<IActionResult> GetDoctorByDocSpecId(int DocSpecId)
+        {
+            try
+            {
+                var DocList = await DocRef.GetDoctorByDocSpecId(DocSpecId);
+                if (DocList.Count > 0)
+                {
+                    return Ok(DocList);
+                }
+                else
+                {
+                    return NotFound("Records are Not Available");
+                }
+
             }
             catch (Exception e)
             {
@@ -118,60 +132,44 @@ namespace HCLSWebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("AdminByAdminTypeId")]
-        public async Task<IActionResult> AdminByAdminTypeId(int AdminTypeId)
+        [Route("GetDocByEmailandPassword")]
+        public async Task<IActionResult> GetDocByEmailandPassword(string Email, string Password)
         {
             try
             {
-                var AdmList = await AdmRef.AdminByAdminTypeId(AdminTypeId);
-                if (AdmList.Count>0)
+                var Doc = await DocRef.GetDocByEmailandPassword(Email,Password);
+                if (Doc != null)
                 {
-                    return Ok(AdmList);
+                    return Ok(Doc);
                 }
                 else
                 {
-                    return BadRequest("Records not Found");
+                    return NotFound("Records are Not Available");
                 }
+
             }
             catch (Exception e)
             {
                 return BadRequest("Something went wrong " + e.Message + "Will resolve soon");
             }
         }
-
-        [HttpGet]
-        [Route("CheckLogin")]
-        public async Task<IActionResult> CheckLogin(string Email, string Password)
-        {
-            try
-            {
-                var Adm = await AdmRef.CheckLogin(Email,Password);
-
-                return Ok(Adm);
-                
-            }
-            catch (Exception e)
-            {
-                return BadRequest("Something went wrong " + e.Message + "Will resolve soon");
-            }
-        }
-
 
         [HttpPut]
-        [Route("UpdateAdmin")]
-        public async Task<IActionResult> UpdateAdmin(Admins admin)
+        [Route("UpdateDoctor")]
+        public async Task<IActionResult> UpdateDoctor(Doctor doctor)
         {
             try
             {
-                var count = await AdmRef.UpdateAdmin(admin);
+                var count = await DocRef.UpdateDoctor(doctor);
                 if (count > 0)
                 {
                     return Ok(count);
                 }
                 else
                 {
-                    return BadRequest("Records not Registered");
+                    return NotFound("Records are Not Updated");
                 }
+
             }
             catch (Exception e)
             {
@@ -180,27 +178,26 @@ namespace HCLSWebAPI.Controllers
         }
 
         [HttpDelete]
-        [Route("DeleteAdmin")]
-        public async Task<IActionResult> DeleteAdmin(int AdminId)
+        [Route("DeleteDoctor")]
+        public async Task<IActionResult> DeleteDoctor(int DocId)
         {
             try
             {
-                var count = await AdmRef.DeleteAdmin(AdminId);
+                var count = await DocRef.DeleteDoctor(DocId);
                 if (count > 0)
                 {
                     return Ok(count);
                 }
                 else
                 {
-                    return BadRequest("Records not Registered");
+                    return NotFound("Records are Not Deleted");
                 }
+
             }
             catch (Exception e)
             {
                 return BadRequest("Something went wrong " + e.Message + "Will resolve soon");
             }
         }
-
-
     }
 }
