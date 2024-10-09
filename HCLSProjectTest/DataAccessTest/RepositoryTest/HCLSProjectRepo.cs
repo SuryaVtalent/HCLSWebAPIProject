@@ -78,5 +78,35 @@ namespace HCLSProjectTest.DataAccessTest.RepositoryTest
         {
             return _db.Count;
         }
+
+        public Task<List<Admins>> CheckLogin(string Email, string Password)
+        {
+            Admins adm = null;
+
+            foreach (Admins a in _db)
+            {
+                if (a.Email==Email && a.Password==Password)
+                {
+                    adm = a;
+                    break;
+                }
+            }
+            return Task.FromResult(_db);
+        }
+
+        Task<Admins> IAdminRepo.CheckLogin(string Email, string Password)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Admins> AdminByAdminId(int AdminId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Admins>> AdminByAdminTypeId(int AdminTypeId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

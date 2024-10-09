@@ -28,11 +28,21 @@ namespace HCLSWebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             services.AddSwaggerGen();
             services.AddControllers();
             services.AddDbContext<DBContextt>(options => options.UseSqlServer(Configuration.GetConnectionString("Constr")));
             services.AddTransient<IAdmintypeRepo,AdminTypeRepo>();
             services.AddTransient<IAdminRepo,AdminRepo>();
+            services.AddTransient<IDeptRepo,DeptRepo>();
+            services.AddTransient<IReceptionRepo,ReceptionRepo>();
+            services.AddTransient<IHelperRepo,HelperRepo>();
+            services.AddTransient<ILabRepo,LabRepo>();
+            services.AddTransient<IDocSpecRepo, DocSpecRepo>();
+            services.AddTransient<IDocRepo,DocRepo>();
+            services.AddTransient<IPatientStatusRepo,PatientStatusRepo>();
+            services.AddTransient<IPatientRepo,PatientRepo>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,6 +52,17 @@ namespace HCLSWebAPI
             {
                 app.UseDeveloperExceptionPage();
             }
+
+        
+                app.UseCors(builder =>
+                            {
+                            builder
+                           .AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+
+                           });
+
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
